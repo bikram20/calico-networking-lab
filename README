@@ -10,5 +10,6 @@ Vanilla kubernetes using Vagrant and Ansible. Deploy on Virtualbox.
 #lab-2:
 
 Networking configuration (IP-IP, VxLAN, and native IP networking). Refer to:
+https://medium.com/@bikramgupta/learn-kubernetes-pod-networking-by-building-your-own-lab-d425ab51c1cf
 
 
