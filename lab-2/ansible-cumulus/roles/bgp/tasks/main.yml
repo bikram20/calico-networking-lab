@@ -1,0 +1,5 @@
+- import_tasks: bgp.yml
+  when: bgp is defined
+
+- import_tasks: bgp_peering.yml
+  when: bgp is defined

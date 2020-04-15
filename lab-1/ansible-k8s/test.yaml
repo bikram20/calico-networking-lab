@@ -1,0 +1,19 @@
+
+---
+- hosts: localhost
+  become: no
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+  tasks:
+  - name: modify ip pool
+    become: no
+    replace:
+      path: calico-new.yaml
+      regexp: '^.*CALICO_IPV4POOL_CIDR *\n.*"192.168.0.0/16"$'
+      replace: '            - name: CALICO_IPV4POOL_CIDR\n              value: "10.10.0.0/16"' 
+  - name: modify default encapsulation
+    become: no
+    replace:
+      path: calico-new.yaml
+      regexp: '^.*CALICO_IPV4POOL_IPIP *\n.*"Always"$'
+      replace: '            - name: CALICO_IPV4POOL_IPIP\n              value: "Never"' 

@@ -1,0 +1,1 @@
+kubeadm join 10.10.1.10:6443 --token ae154w.wpgm9jlmub20teoj     --discovery-token-ca-cert-hash sha256:8245c2855483bf8f11b66b2360f9495b0ffed71afc7d276d4e52fddba5f57113 

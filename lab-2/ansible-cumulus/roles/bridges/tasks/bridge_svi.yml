@@ -1,0 +1,8 @@
+- name: Configure Bridge SVIs
+  nclu:
+    template: |
+      {% for bridge in bridges %}
+      add bridge {{bridge['name']}} ip address {{bridge['ipv4']}}
+      {% endfor %}
+    commit: false      
+  notify: "Configuration was changed"

@@ -1,0 +1,17 @@
+{
+  "description": "Ubuntu 18.04 LTS based virtual box",
+  "builders": [{
+      "communicator": "ssh",
+      "source_path": "geerlingguy/ubuntu1804",
+      "provider": "virtualbox",
+      "type": "vagrant",
+      "box_name": "k8snode"
+   }],
+  "provisioners": [{
+      "type": "shell",
+      "execute_command": "echo 'packer' | sudo -S env {{ .Vars }} {{ .Path }}",
+      "scripts": [
+         "update_ubuntu_k8s_node.sh"
+      ]
+  }]
+}

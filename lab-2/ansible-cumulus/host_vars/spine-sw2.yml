@@ -1,0 +1,35 @@
+routerid: 172.16.255.2
+hostname: spine-sw2.lab.local
+
+loopbacks:
+  - name: lo
+    ipv4: 172.16.255.2/32
+
+interfaces:
+  - name: swp1
+  - name: swp2
+  - name: swp3
+
+bgp:
+  as: 65002
+  routerid: 172.16.255.2
+  ipv4_unicast_redistribute:
+    - route_map: CONNECTED_TO_BGP
+      type: connected 
+  ipv4_unicast_peers:
+    - interface: swp1
+      softinbound: true
+    - interface: swp2
+      softinbound: true
+    - interface: swp3
+      softinbound: true
+
+routemaps:
+  - name: CONNECTED_TO_BGP
+    action: permit
+    order: 10
+    statement: "match interface lo"
+  - name: CONNECTED_TO_BGP
+    action: deny
+    order: 65535
+    statement: ""

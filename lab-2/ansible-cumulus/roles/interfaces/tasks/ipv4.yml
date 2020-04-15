@@ -1,0 +1,10 @@
+- name: Configure IPv4 interfaces
+  nclu:
+    template: |
+      {% for interface in interfaces %}
+      {% if interface['ipv4'] is defined %}
+      add interface {{interface['name']}} ip address {{interface['ipv4']}}
+      {% endif %}
+      {% endfor %}
+    commit: false      
+  notify: "Configuration was changed"
