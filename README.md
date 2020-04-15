@@ -1,4 +1,4 @@
-# Packer-lab
+### Packer-lab
 
 Create your own node. Just run packer build. It will generate an Ubuntu 18.04 vbox image loaded with ALL software and images. It will save time and bandwidth when you re-build the lab 50 times.
 
