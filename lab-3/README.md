@@ -242,6 +242,7 @@ The commands above are in bgpconfig.yaml file on master node, so it's easy to co
 
 Let us disable full-mesh and restart calicpo-node.
 
+```
 -master:~$ calicoctl apply -f - <<EOF
 > apiVersion: projectcalico.org/v3
 > kind: BGPConfiguration
