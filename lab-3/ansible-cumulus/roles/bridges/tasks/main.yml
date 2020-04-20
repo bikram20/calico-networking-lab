@@ -1,0 +1,5 @@
+- import_tasks: bridge_svi.yml
+  when: bridges is defined
+
+- import_tasks: bridge_ports.yml
+  when: bridges is defined

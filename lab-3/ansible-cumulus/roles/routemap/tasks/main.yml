@@ -1,0 +1,9 @@
+- name: Configure Route-maps
+  nclu:
+    template: |
+      {% for routemap in routemaps %}
+      add routing route-map {{routemap['name']}} {{routemap['action']}} {{routemap['order']}} {{routemap['statement']}}
+      {% endfor %}
+    commit: false
+  notify: "Configuration was changed"
+  when: routemaps is defined

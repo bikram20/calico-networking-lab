@@ -1,0 +1,7 @@
+- name: Configure IPv4 loopbacks
+  nclu:
+    template: |
+      {% for loopback in loopbacks %}
+      add loopback {{loopback['name']}} ip address {{loopback['ipv4']}}
+      {% endfor %}
+  notify: "Configuration was changed"

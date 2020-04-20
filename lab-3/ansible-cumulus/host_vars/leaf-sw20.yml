@@ -1,0 +1,70 @@
+routerid: 172.16.255.102
+hostname: leaf-sw20.lab.local
+
+loopbacks:
+  - name: lo
+    ipv4: 172.16.255.102/32
+
+interfaces:    
+  - name: swp1
+  - name: swp2
+  - name: swp4
+
+bridges:
+  - name: VLAN10
+    ipv4: 10.50.3.1/24
+    ports:
+      - swp3
+
+static:
+  - name: node2
+    destination: 192.168.201.1/32
+    nhop: 10.50.3.10
+
+
+
+bgp:
+  as: 65102
+  routerid: 172.16.255.102
+  clusterid: 172.16.255.102
+  ipv4_unicast_redistribute:
+    - route_map: CONNECTED_TO_BGP
+      type: connected  
+    - route_map: STATIC_NODE_LOOPBACK
+      type: static
+  ipv4_unicast_peers:
+    - interface: swp1
+      astype: external
+      softinbound: true
+    - interface: swp2
+      astype: external
+      softinbound: true
+    - interface: swp4
+      astype: internal
+      softinbound: true
+
+  ipv4_unicast_peer_groups:
+    - group_name: K8S-NODES
+      group_as: 65102
+      group_range: 10.50.3.0/24
+      rr_client: true
+      next_hop_self: true
+      softinbound: true
+
+routemaps:
+  - name: CONNECTED_TO_BGP
+    action: permit
+    order: 10
+    statement: "match interface lo"
+  - name: CONNECTED_TO_BGP
+    action: permit
+    order: 20
+    statement: "match interface VLAN10"
+  - name: CONNECTED_TO_BGP
+    action: deny
+    order: 65535
+    statement: ""
+  - name: STATIC_NODE_LOOPBACK
+    action: permit
+    order: 10
+    statement: ""

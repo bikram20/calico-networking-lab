@@ -1,0 +1,167 @@
+---
+# Global BGP configuration. Disable node-to-node mesh
+
+apiVersion: projectcalico.org/v3
+kind: BGPConfiguration
+metadata:
+  name: default
+spec:
+  logSeverityScreen: Info
+  nodeToNodeMeshEnabled: false
+
+---
+# Per-node configuration
+
+apiVersion: projectcalico.org/v3
+kind: Node
+metadata:
+  labels:
+    rack: rack1
+  name: k8s-master
+spec:
+  bgp:
+    asNumber: 65101
+    ipv4Address: 192.168.200.1
+---
+apiVersion: projectcalico.org/v3
+kind: Node
+metadata:
+  labels:
+    rack: rack2
+  name: k8s-worker-1
+spec:
+  bgp:
+    asNumber: 65102
+    ipv4Address: 192.168.201.1
+---
+apiVersion: projectcalico.org/v3
+kind: Node
+metadata:
+  labels:
+    rack: rack3
+  name: k8s-worker-2
+spec:
+  bgp:
+    asNumber: 65103
+    ipv4Address: 192.168.202.1
+
+---
+# BGP peer configuration.
+
+apiVersion: projectcalico.org/v3
+kind: BGPPeer
+metadata:
+  name: rack1-tor1
+spec:
+  peerIP: 10.50.1.1
+  asNumber: 65101
+  nodeSelector: rack == 'rack1'
+  sourceAddress: None
+  failureDetectionMode: BFDIfDirectlyConnected
+  restartMode: LongLivedGracefulRestart
+  birdGatewayMode: DirectIfDirectlyConnected
+---
+apiVersion: projectcalico.org/v3
+kind: BGPPeer
+metadata:
+  name: rack1-tor2
+spec:
+  peerIP: 10.50.2.1
+  asNumber: 65101
+  nodeSelector: rack == 'rack1'
+  sourceAddress: None
+  failureDetectionMode: BFDIfDirectlyConnected
+  restartMode: LongLivedGracefulRestart
+  birdGatewayMode: DirectIfDirectlyConnected
+---
+
+apiVersion: projectcalico.org/v3
+kind: BGPPeer
+metadata:
+  name: rack2-tor1
+spec:
+  peerIP: 10.50.3.1
+  asNumber: 65102
+  nodeSelector: rack == 'rack2'
+  sourceAddress: None
+  failureDetectionMode: BFDIfDirectlyConnected
+  restartMode: LongLivedGracefulRestart
+  birdGatewayMode: DirectIfDirectlyConnected
+---
+apiVersion: projectcalico.org/v3
+kind: BGPPeer
+metadata:
+  name: rack2-tor2
+spec:
+  peerIP: 10.50.4.1
+  asNumber: 65102
+  nodeSelector: rack == 'rack2'
+  sourceAddress: None
+  failureDetectionMode: BFDIfDirectlyConnected
+  restartMode: LongLivedGracefulRestart
+  birdGatewayMode: DirectIfDirectlyConnected
+---
+
+
+apiVersion: projectcalico.org/v3
+kind: BGPPeer
+metadata:
+  name: rack3-tor1
+spec:
+  peerIP: 10.50.5.1
+  asNumber: 65103
+  nodeSelector: rack == 'rack3'
+  sourceAddress: None
+  failureDetectionMode: BFDIfDirectlyConnected
+  restartMode: LongLivedGracefulRestart
+  birdGatewayMode: DirectIfDirectlyConnected
+---
+apiVersion: projectcalico.org/v3
+kind: BGPPeer
+metadata:
+  name: rack3-tor2
+spec:
+  peerIP: 10.50.6.1
+  asNumber: 65103
+  nodeSelector: rack == 'rack3'
+  sourceAddress: None
+  failureDetectionMode: BFDIfDirectlyConnected
+  restartMode: LongLivedGracefulRestart
+  birdGatewayMode: DirectIfDirectlyConnected
+---
+
+apiVersion: projectcalico.org/v3
+kind: IPPool
+metadata:
+  name: loopbacks-rack-a
+spec:
+  cidr: 192.168.200.1/32
+  disabled: True
+  nodeSelector: rack == 'rack1'
+---
+apiVersion: projectcalico.org/v3
+kind: IPPool
+metadata:
+  name: loopbacks-rack-b
+spec:
+  cidr: 192.168.201.1/32
+  disabled: True
+  nodeSelector: rack == 'rack2'
+---
+apiVersion: projectcalico.org/v3
+kind: IPPool
+metadata:
+  name: loopbacks-rack-c
+spec:
+  cidr: 192.168.202.1/32
+  disabled: True
+  nodeSelector: rack == 'rack3'
+---
+
+
+#
+# Remember to:
+# Apply labels to nodes
+# Restart calico node for changes to take effect
+# Delete the static route from TOR after configuring the loopback advertisement. 
+#

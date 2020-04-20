@@ -1,0 +1,10 @@
+- name: Configure static route
+  become: yes
+  nclu:
+    template: |
+      {% if static is defined %}
+      {% for route in static %}
+      add routing route {{route['destination']}} {{route['nhop']}}
+      {% endfor %}
+      {% endif %}
+  notify: "Configuration was changed"

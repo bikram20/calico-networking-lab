@@ -1,0 +1,52 @@
+- name: Configure BGP IPv4 unicast peers
+  nclu:
+    template: |
+      {% for peer in bgp['ipv4_unicast_peers'] %}
+      {% if peer['interface'] is defined %}
+      add bgp neighbor {{peer['interface']}} interface remote-as {{peer['astype']}}
+      add bgp neighbor {{peer['interface']}} capability extended-nexthop
+      add bgp neighbor {{peer['interface']}} soft-reconfiguration inbound
+      add bgp neighbor {{peer['interface']}} bfd 
+      {% endif %}
+      {% if peer['peer_ip'] is defined %}
+      add bgp neighbor {{peer['peer_ip']}} remote-as {{peer['peer_as']}}
+      add bgp ipv4 unicast neighbor {{peer['peer_ip']}} activate
+      add bgp neighbor {{peer['peer_ip']}} soft-reconfiguration inbound
+      {% endif %}
+      {% if peer['local_ip'] is defined %}
+      add bgp neighbor {{peer['peer_ip']}} update-source {{peer['local_ip']}}
+      {% endif %}
+      {% if peer['multihop'] is defined and peer['multihop'] %}
+      add bgp neighbor {{peer['peer_ip']}} ebgp-multihop
+      {% endif %}
+      {% endfor %}
+    commit: false      
+  notify: "Configuration was changed"
+  when: bgp['ipv4_unicast_peers'] is defined
+
+
+- name: Configure BGP IPv4 unicast peers
+  nclu:
+    template: |
+      {% for group in bgp['ipv4_unicast_peer_groups'] %}
+      add bgp neighbor {{group['group_name']}} peer-group
+      add bgp neighbor {{group['group_name']}} bfd
+      add bgp listen range {{group['group_range']}} peer-group {{group['group_name']}} 
+      add bgp neighbor {{group['group_name']}} remote-as {{group['group_as']}}
+      add bgp ipv4 unicast neighbor {{group['group_name']}} activate
+      {% if group['multihop'] is defined and group['multihop'] %}
+      add bgp neighbor {{group['group_name']}} ebgp-multihop
+      {% endif %}
+      {% if group['rr_client'] is defined and group['rr_client'] %}
+      add bgp neighbor {{group['group_name']}} route-reflector-client
+      {% endif %}
+      {% if group['next_hop_self'] is defined and group ['next_hop_self'] %}
+      add bgp neighbor {{group['group_name']}} next-hop-self
+      {% endif %}
+      {%if group['softinbound'] is defined and group['softinbound'] %}
+      add bgp neighbor {{group['group_name']}} soft-reconfiguration inbound
+      {% endif %}
+      {% endfor %}
+    commit: false      
+  notify: "Configuration was changed"
+  when: bgp['ipv4_unicast_peer_groups'] is defined

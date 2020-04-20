@@ -1,0 +1,241 @@
+Vagrant.configure("2") do |config|
+    config.ssh.insert_key = false
+
+    #
+    # Cumulus switches (leaf1, leaf2, leaf3, spine1, spine2). 
+    #
+
+    config.vm.define("spine1") do |spine1|
+        spine1.vm.box = "cumulusvx41"
+        #spine1.vm.box_version = "4.1.0"
+  
+        spine1.vm.network "private_network", virtualbox__intnet: "spine1_leaf10", cumulus__intname: 'swp1', auto_config: false
+        spine1.vm.network "private_network", virtualbox__intnet: "spine1_leaf11", cumulus__intname: 'swp2', auto_config: false
+        spine1.vm.network "private_network", virtualbox__intnet: "spine1_leaf20", cumulus__intname: 'swp3', auto_config: false
+        spine1.vm.network "private_network", virtualbox__intnet: "spine1_leaf21", cumulus__intname: 'swp4', auto_config: false
+        spine1.vm.network "private_network", virtualbox__intnet: "spine1_leaf30", cumulus__intname: 'swp5', auto_config: false
+        spine1.vm.network "private_network", virtualbox__intnet: "spine1_leaf31", cumulus__intname: 'swp6', auto_config: false
+        spine1.vm.provision "ansible" do |ansible|
+            ansible.playbook = "ansible-cumulus/cumulus.yaml"
+            ansible.raw_arguments = "--extra-vars=@ansible-cumulus/host_vars/spine-sw1.yml" 
+            verbose = true
+        end
+    end
+
+    config.vm.define("spine2") do |spine2|
+        spine2.vm.box = "cumulusvx41"
+        #spine2.vm.box_version = "4.1.0"
+  
+        spine2.vm.network "private_network", virtualbox__intnet: "spine2_leaf10", cumulus__intname: 'swp1', auto_config: false
+        spine2.vm.network "private_network", virtualbox__intnet: "spine2_leaf11", cumulus__intname: 'swp2', auto_config: false
+        spine2.vm.network "private_network", virtualbox__intnet: "spine2_leaf20", cumulus__intname: 'swp3', auto_config: false
+        spine2.vm.network "private_network", virtualbox__intnet: "spine2_leaf21", cumulus__intname: 'swp4', auto_config: false
+        spine2.vm.network "private_network", virtualbox__intnet: "spine2_leaf30", cumulus__intname: 'swp5', auto_config: false
+        spine2.vm.network "private_network", virtualbox__intnet: "spine2_leaf31", cumulus__intname: 'swp6', auto_config: false
+        spine2.vm.provision "ansible" do |ansible|
+            ansible.playbook = "ansible-cumulus/cumulus.yaml"
+            ansible.raw_arguments = "--extra-vars=@ansible-cumulus/host_vars/spine-sw2.yml" 
+            verbose = true
+        end
+    end
+
+    config.vm.define("leaf10") do |leaf1|
+        leaf1.vm.box = "cumulusvx41"
+        #leaf1.vm.box_version = "4.1.0"
+  
+        leaf1.vm.network "private_network", virtualbox__intnet: "spine1_leaf10", cumulus__intname: 'swp1', auto_config: false
+        leaf1.vm.network "private_network", virtualbox__intnet: "spine2_leaf10", cumulus__intname: 'swp2', auto_config: false
+        leaf1.vm.network "private_network", virtualbox__intnet: "rack1_leaf10", cumulus__intname: 'swp3', auto_config: false
+        leaf1.vm.network "private_network", virtualbox__intnet: "leaf10_leaf11", cumulus__intname: 'swp4', auto_config: false
+        leaf1.vm.provision "ansible" do |ansible|
+            ansible.playbook = "ansible-cumulus/cumulus.yaml"
+            ansible.raw_arguments = "--extra-vars=@ansible-cumulus/host_vars/leaf-sw10.yml" 
+            verbose = "-vvv"
+        end
+    end
+
+    config.vm.define("leaf11") do |leaf1|
+        leaf1.vm.box = "cumulusvx41"
+        #leaf1.vm.box_version = "4.1.0"
+  
+        leaf1.vm.network "private_network", virtualbox__intnet: "spine1_leaf11", cumulus__intname: 'swp1', auto_config: false
+        leaf1.vm.network "private_network", virtualbox__intnet: "spine2_leaf11", cumulus__intname: 'swp2', auto_config: false
+        leaf1.vm.network "private_network", virtualbox__intnet: "rack1_leaf11", cumulus__intname: 'swp3', auto_config: false
+        leaf1.vm.network "private_network", virtualbox__intnet: "leaf10_leaf11", cumulus__intname: 'swp4', auto_config: false
+        leaf1.vm.provision "ansible" do |ansible|
+            ansible.playbook = "ansible-cumulus/cumulus.yaml"
+            ansible.raw_arguments = "--extra-vars=@ansible-cumulus/host_vars/leaf-sw11.yml" 
+            verbose = true
+        end
+    end
+
+    config.vm.define("leaf20") do |leaf2|
+        leaf2.vm.box = "cumulusvx41"
+        #leaf2.vm.box_version = "4.1.0"
+  
+        leaf2.vm.network "private_network", virtualbox__intnet: "spine1_leaf20", cumulus__intname: 'swp1', auto_config: false
+        leaf2.vm.network "private_network", virtualbox__intnet: "spine2_leaf20", cumulus__intname: 'swp2', auto_config: false
+        leaf2.vm.network "private_network", virtualbox__intnet: "rack2_leaf20", cumulus__intname: 'swp3', auto_config: false
+        leaf2.vm.network "private_network", virtualbox__intnet: "leaf20_leaf21", cumulus__intname: 'swp4', auto_config: false
+        leaf2.vm.provision "ansible" do |ansible|
+            ansible.playbook = "ansible-cumulus/cumulus.yaml"
+            ansible.raw_arguments = "--extra-vars=@ansible-cumulus/host_vars/leaf-sw20.yml" 
+            verbose = true
+        end
+    end
+
+    config.vm.define("leaf21") do |leaf2|
+        leaf2.vm.box = "cumulusvx41"
+        #leaf2.vm.box_version = "4.1.0"
+  
+        leaf2.vm.network "private_network", virtualbox__intnet: "spine1_leaf21", cumulus__intname: 'swp1', auto_config: false
+        leaf2.vm.network "private_network", virtualbox__intnet: "spine2_leaf21", cumulus__intname: 'swp2', auto_config: false
+        leaf2.vm.network "private_network", virtualbox__intnet: "rack2_leaf21", cumulus__intname: 'swp3', auto_config: false
+        leaf2.vm.network "private_network", virtualbox__intnet: "leaf20_leaf21", cumulus__intname: 'swp4', auto_config: false
+        leaf2.vm.provision "ansible" do |ansible|
+            ansible.playbook = "ansible-cumulus/cumulus.yaml"
+            ansible.raw_arguments = "--extra-vars=@ansible-cumulus/host_vars/leaf-sw21.yml" 
+            verbose = true
+        end
+    end
+
+    config.vm.define("leaf30") do |leaf3|
+        leaf3.vm.box = "cumulusvx41"
+        #leaf3.vm.box_version = "4.1.0"
+  
+        leaf3.vm.network "private_network", virtualbox__intnet: "spine1_leaf30", cumulus__intname: 'swp1', auto_config: false
+        leaf3.vm.network "private_network", virtualbox__intnet: "spine2_leaf30", cumulus__intname: 'swp2', auto_config: false
+        leaf3.vm.network "private_network", virtualbox__intnet: "rack3_leaf30", cumulus__intname: 'swp3', auto_config: false
+        leaf3.vm.network "private_network", virtualbox__intnet: "leaf30_leaf31", cumulus__intname: 'swp4', auto_config: false
+        leaf3.vm.provision "ansible" do |ansible|
+            ansible.playbook = "ansible-cumulus/cumulus.yaml"
+            ansible.raw_arguments = "--extra-vars=@ansible-cumulus/host_vars/leaf-sw30.yml" 
+            verbose = true
+        end
+    end
+      
+    config.vm.define("leaf31") do |leaf3|
+        leaf3.vm.box = "cumulusvx41"
+        #leaf3.vm.box_version = "4.1.0"
+  
+        leaf3.vm.network "private_network", virtualbox__intnet: "spine1_leaf31", cumulus__intname: 'swp1', auto_config: false
+        leaf3.vm.network "private_network", virtualbox__intnet: "spine2_leaf31", cumulus__intname: 'swp2', auto_config: false
+        leaf3.vm.network "private_network", virtualbox__intnet: "rack3_leaf31", cumulus__intname: 'swp3', auto_config: false
+        leaf3.vm.network "private_network", virtualbox__intnet: "leaf30_leaf31", cumulus__intname: 'swp4', auto_config: false
+        leaf3.vm.provision "ansible" do |ansible|
+            ansible.playbook = "ansible-cumulus/cumulus.yaml"
+            ansible.raw_arguments = "--extra-vars=@ansible-cumulus/host_vars/leaf-sw31.yml" 
+            verbose = true
+        end
+    end
+      
+
+
+    #
+    # Kubernetes nodes
+    #
+
+    config.vm.define "k8s-master" do |master|
+        master.vm.box = "k8s-baseos"
+        master.vm.provider "virtualbox" do |v|
+            v.memory = 2048
+            v.cpus = 2
+        end
+        master.vm.hostname = "k8s-master"
+        master.vm.network "private_network", virtualbox__intnet: "rack1_leaf10", ip: "10.50.1.10"
+        master.vm.network "private_network", virtualbox__intnet: "rack1_leaf11", ip: "10.50.2.10"
+
+        master.vm.provision "shell" do |s|
+            s.inline = "sudo ip link add dummy0 type dummy;
+                        sudo ip link set dummy0 multicast on;
+                        sudo ip addr add 192.168.200.1/32 dev dummy0;
+                        sudo ip link set dummy0 up;
+                        sudo ip route add 10.50.3.0/24 proto static scope global nexthop via 10.50.1.1 nexthop via 10.50.2.1;
+                        sudo ip route add 10.50.4.0/24 proto static scope global nexthop via 10.50.1.1 nexthop via 10.50.2.1;
+                        sudo ip route add 10.50.5.0/24 proto static scope global nexthop via 10.50.1.1 nexthop via 10.50.2.1;
+                        sudo ip route add 10.50.6.0/24 proto static scope global nexthop via 10.50.1.1 nexthop via 10.50.2.1;
+                        sudo ip route add 192.168.201.1/32 proto static scope global nexthop via 10.50.1.1 nexthop via 10.50.2.1;
+                        sudo ip route add 192.168.202.1/32 proto static scope global nexthop via 10.50.1.1 nexthop via 10.50.2.1;
+                        sudo ip route add 172.16.255.0/24 proto static scope global nexthop via 10.50.1.1 nexthop via 10.50.2.1;"
+        end
+
+        master.vm.provision "ansible" do |ansible|
+            ansible.playbook = "ansible-k8s/master.yaml"
+            verbose = true
+            ansible.extra_vars = {
+                node_ip: "192.168.200.1",
+                pod_network_cidr: "10.10.0.0/16",
+            }
+        end
+    end
+
+    config.vm.define "k8s-worker-1" do |worker|
+        worker.vm.box = "k8s-baseos"
+        worker.vm.provider "virtualbox" do |v|
+            v.memory = 2048
+            v.cpus = 2
+        end
+        worker.vm.hostname = "k8s-worker-1"
+        worker.vm.network "private_network", virtualbox__intnet: "rack2_leaf20", ip: "10.50.3.10"
+        worker.vm.network "private_network", virtualbox__intnet: "rack2_leaf21", ip: "10.50.4.10"
+
+        worker.vm.provision "shell" do |s|
+            s.inline = "sudo ip link add dummy0 type dummy;
+                        sudo ip link set dummy0 multicast on;
+                        sudo ip addr add 192.168.201.1/32 dev dummy0;
+                        sudo ip link set dummy0 up;
+                        sudo ip route add 10.50.1.0/24 proto static scope global nexthop via 10.50.3.1 nexthop via 10.50.4.1;
+                        sudo ip route add 10.50.2.0/24 proto static scope global nexthop via 10.50.3.1 nexthop via 10.50.4.1;
+                        sudo ip route add 10.50.5.0/24 proto static scope global nexthop via 10.50.3.1 nexthop via 10.50.4.1;
+                        sudo ip route add 10.50.6.0/24 proto static scope global nexthop via 10.50.3.1 nexthop via 10.50.4.1;
+                        sudo ip route add 192.168.200.1/32 proto static scope global nexthop via 10.50.3.1 nexthop via 10.50.4.1;
+                        sudo ip route add 192.168.202.1/32 proto static scope global nexthop via 10.50.3.1 nexthop via 10.50.4.1;
+                        sudo ip route add 172.16.255.0/24 proto static scope global nexthop via 10.50.3.1 nexthop via 10.50.4.1"
+        end
+
+
+        worker.vm.provision "ansible" do |ansible|
+            ansible.playbook = "ansible-k8s/worker.yaml"
+            verbose = true
+            ansible.extra_vars = {
+                node_ip: "192.168.201.1",
+            }
+        end
+    end
+
+    config.vm.define "k8s-worker-2" do |worker|
+        worker.vm.box = "k8s-baseos"
+        worker.vm.provider "virtualbox" do |v|
+            v.memory = 2048
+            v.cpus = 2
+        end
+        worker.vm.hostname = "k8s-worker-2"
+        worker.vm.network "private_network", virtualbox__intnet: "rack3_leaf30", ip: "10.50.5.10"
+        worker.vm.network "private_network", virtualbox__intnet: "rack3_leaf31", ip: "10.50.6.10"
+
+        worker.vm.provision "shell" do |s|
+            s.inline = "sudo ip link add dummy0 type dummy;
+                        sudo ip link set dummy0 multicast on;
+                        sudo ip addr add 192.168.202.1/32 dev dummy0;
+                        sudo ip link set dummy0 up;
+                        sudo ip route add 10.50.1.0/24 proto static scope global nexthop via 10.50.5.1 nexthop via 10.50.6.1;
+                        sudo ip route add 10.50.2.0/24 proto static scope global nexthop via 10.50.5.1 nexthop via 10.50.6.1;
+                        sudo ip route add 10.50.3.0/24 proto static scope global nexthop via 10.50.5.1 nexthop via 10.50.6.1;
+                        sudo ip route add 10.50.4.0/24 proto static scope global nexthop via 10.50.5.1 nexthop via 10.50.6.1;
+                        sudo ip route add 192.168.201.1/32 proto static scope global nexthop via 10.50.5.1 nexthop via 10.50.6.1;
+                        sudo ip route add 192.168.200.1/32 proto static scope global nexthop via 10.50.5.1 nexthop via 10.50.6.1;
+                        sudo ip route add 172.16.255.0/24 proto static scope global nexthop via 10.50.5.1 nexthop via 10.50.6.1;"
+        end
+
+
+        worker.vm.provision "ansible" do |ansible|
+            ansible.playbook = "ansible-k8s/worker.yaml"
+            verbose = true
+            ansible.extra_vars = {
+                node_ip: "192.168.202.1/32",
+            }
+        end
+    end
+
+end
+

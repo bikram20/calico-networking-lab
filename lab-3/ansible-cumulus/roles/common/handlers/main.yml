@@ -1,0 +1,4 @@
+- name: "Configuration was changed"
+  set_fact:
+    config_was_changed: true
+

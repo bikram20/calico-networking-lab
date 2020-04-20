@@ -1,0 +1,20 @@
+- name: Configure BGP
+  nclu:
+    template: |
+      add bgp autonomous-system {{bgp['as']}}
+      add bgp router-id {{bgp['routerid']}}
+      {% if bgp['clusterid'] is defined %}
+      add bgp cluster-id {{bgp['clusterid']}}
+      {% endif %}
+  notify: "Configuration was changed"
+
+- name: Attach BGP route-maps
+  nclu:
+    template: |
+      {% for redistributions in bgp['ipv4_unicast_redistribute'] %}
+      add bgp ipv4 unicast redistribute {{redistributions['type']}} route-map {{redistributions['route_map']}}
+      {% endfor %}
+  notify: "Configuration was changed"
+  when: bgp['ipv4_unicast_redistribute'] is defined
+
+

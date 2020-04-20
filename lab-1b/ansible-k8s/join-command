@@ -1,0 +1,1 @@
+kubeadm join 10.10.2.10:6443 --token psiy73.s4ws266x9igxk7yo     --discovery-token-ca-cert-hash sha256:349377f69aa52df133edeb9b461397145602079a9d3f19699a896e2532c6fd56 

@@ -1,0 +1,44 @@
+---
+- hosts: all
+  gather_facts: no
+  become: yes
+  become_method: sudo
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+
+  tasks:
+    - import_role:
+        name: common
+
+    - import_role:
+        name: basic_config
+
+    - import_role:
+        name: interfaces
+
+    - import_role:
+        name: bridges
+
+    - import_role:
+        name: staticroute
+
+    - import_role:
+        name: loopbacks
+
+    - import_role:
+        name: routemap
+
+    - import_role:
+        name: bgp
+
+  post_tasks:
+    - name: "Commit pending configuration"
+      block:
+        - nclu:
+            commands:
+              - show hostname
+            commit: true
+        - set_fact:
+            config_was_changed: false
+      when: config_was_changed is defined and config_was_changed
+

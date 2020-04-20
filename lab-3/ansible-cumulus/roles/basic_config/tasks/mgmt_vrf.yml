@@ -1,0 +1,10 @@
+- name: Enable MGMT vrf
+  # @piotr.szlenk - when turning on mgmt vrf, Cumulus drops SSH connection which will mark this task as failed
+  retries: 2
+  delay: 5
+  nclu:
+    commands:
+      - add vrf mgmt
+    commit: true
+  notify: "Configuration was changed"
+  when: enable_mgmt_vrf

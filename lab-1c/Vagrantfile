@@ -1,0 +1,93 @@
+Vagrant.configure("2") do |config|
+    config.ssh.insert_key = false
+
+    #
+    # Kubernetes nodes
+    #
+
+    config.vm.define "k8s-master" do |master|
+        master.vm.box = "k8s-baseos"
+        master.vm.provider "virtualbox" do |v|
+            v.memory = 2048
+            v.cpus = 2
+        end
+        master.vm.hostname = "k8s-master"
+        master.vm.network "private_network", virtualbox__intnet: "pvt_net_1", ip: "10.10.1.10"
+        master.vm.network "private_network", virtualbox__intnet: "pvt_net_2", ip: "10.10.2.10"
+
+        master.vm.provision "shell" do |s|
+            s.inline = "sudo ip link add dummy0 type dummy;
+                        sudo ip link set dummy0 multicast on;
+                        sudo ip addr add 192.168.200.1/32 dev dummy0;
+                        sudo ip link set dummy0 up;
+                        sudo ip route add 192.168.201.1  proto static scope global nexthop via 10.10.1.20  nexthop via 10.10.2.20 
+                        sudo ip route add 192.168.202.1  proto static scope global nexthop via 10.10.1.30  nexthop via 10.10.2.30 "
+        end
+
+
+        master.vm.provision "ansible" do |ansible|
+            ansible.playbook = "ansible-k8s/master.yaml"
+            verbose = true
+            ansible.extra_vars = {
+                node_ip: "192.168.200.1",
+                pod_network_cidr: "10.100.0.0/16",
+            }
+        end
+    end
+
+    config.vm.define "k8s-worker-1" do |worker|
+        worker.vm.box = "k8s-baseos"
+        worker.vm.provider "virtualbox" do |v|
+            v.memory = 2048
+            v.cpus = 2
+        end
+        worker.vm.hostname = "k8s-worker-1"
+        worker.vm.network "private_network", virtualbox__intnet: "pvt_net_1", ip: "10.10.1.20"
+        worker.vm.network "private_network", virtualbox__intnet: "pvt_net_2", ip: "10.10.2.20"
+        worker.vm.provision "shell" do |s|
+            s.inline = "sudo ip link add dummy0 type dummy;
+                        sudo ip link set dummy0 multicast on;
+                        sudo ip addr add 192.168.201.1/32 dev dummy0;
+                        sudo ip link set dummy0 up;
+                        sudo ip route add 192.168.200.1  proto static scope global nexthop via 10.10.1.10  nexthop via 10.10.2.10 
+                        sudo ip route add 192.168.202.1  proto static scope global nexthop via 10.10.1.30  nexthop via 10.10.2.30 "
+        end
+
+        worker.vm.provision "ansible" do |ansible|
+            ansible.playbook = "ansible-k8s/worker.yaml"
+            verbose = true
+            ansible.extra_vars = {
+                node_ip: "192.168.201.1",
+            }
+        end
+    end
+
+    config.vm.define "k8s-worker-2" do |worker|
+        worker.vm.box = "k8s-baseos"
+        worker.vm.provider "virtualbox" do |v|
+            v.memory = 2048
+            v.cpus = 2
+        end
+        worker.vm.hostname = "k8s-worker-2"
+        worker.vm.network "private_network", virtualbox__intnet: "pvt_net_1", ip: "10.10.1.30"
+        worker.vm.network "private_network", virtualbox__intnet: "pvt_net_2", ip: "10.10.2.30"
+        worker.vm.provision "shell" do |s|
+            s.inline = "sudo ip link add dummy0 type dummy;
+                        sudo ip link set dummy0 multicast on;
+                        sudo ip addr add 192.168.202.1/32 dev dummy0;
+                        sudo ip link set dummy0 up;
+                        sudo ip route add 192.168.200.1  proto static scope global nexthop via 10.10.1.10  nexthop via 10.10.2.10 
+                        sudo ip route add 192.168.201.1  proto static scope global nexthop via 10.10.1.20  nexthop via 10.10.2.20 "
+        end
+
+        worker.vm.provision "ansible" do |ansible|
+            ansible.playbook = "ansible-k8s/worker.yaml"
+            verbose = true
+            ansible.extra_vars = {
+                node_ip: "192.168.202.1",
+            }
+        end
+    end
+
+end
+

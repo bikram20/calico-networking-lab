@@ -1,0 +1,1 @@
+kubeadm join 192.168.200.1:6443 --token 2xzdip.xarwtaj65lu31wrn     --discovery-token-ca-cert-hash sha256:0ecc7a63c96216809c0152e3d872689a974fd68ab24e799e42aa42806166922c 

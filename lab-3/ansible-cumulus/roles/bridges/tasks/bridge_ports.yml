@@ -1,0 +1,10 @@
+- name: Configure Bridge ports
+  nclu:
+    template: |
+      {% for bridge in bridges %}
+        {% for port in bridge['ports'] %}
+          add bridge {{bridge['name']}} port {{port}}
+        {% endfor %}
+      {% endfor %}
+    commit: false      
+  notify: "Configuration was changed"

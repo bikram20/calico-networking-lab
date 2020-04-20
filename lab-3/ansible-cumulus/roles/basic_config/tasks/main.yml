@@ -1,0 +1,6 @@
+- name: Set hostname
+  hostname:
+    name: '{{hostname}}'
+  notify: "Configuration was changed"
+
+#- include_tasks: mgmt_vrf.yml
