@@ -28,7 +28,7 @@ This will set up unnumbered BGP between fabric switches. There will be NO BGP be
 
 Review the setup.
 
-`
+```
 b-3 git:(master) ✗ vagrant ssh k8s-master
 ...
 vagrant@k8s-master:~$ kubectl get node -o wide
@@ -73,11 +73,11 @@ tigera-prometheus   calico-prometheus-operator-588fdd8d9-wsj9z   1/1     Running
 tigera-system       tigera-apiserver-67b87557db-kd5gp            2/2     Running   0          67m   10.10.235.196   k8s-master     <none>      
      <none>
 vagrant@k8s-master:~$
-`
+```
 
 So we have the nodes ready and pods running tied to loopback.
 
-`
+```
 vagrant@k8s-master:~$ sudo calicoctl node status
 Calico process is running.
 
@@ -92,11 +92,11 @@ IPv6 BGP status
 No IPv6 peers found.
 
 vagrant@k8s-master:~$ 
-`
+```
 
 Calico BGP peering is node-to-node. We need to change it to peer with fabric. After that we can disable the static routes and advertise the loopback from the node.
 
-`
+```
 vagrant@k8s-master:~$ sudo calicoctl node status                                                                                               
 Calico process is running.                                                                                                                     
                                                                                                                                                
@@ -165,11 +165,11 @@ io/hostname=k8s-master,kubernetes.io/os=linux,node-role.kubernetes.io/master=,ra
 k8s-worker-1   Ready    <none>   77m   v1.18.1   beta.kubernetes.io/arch=amd64,beta.kubernetes.io/os=linux,kubernetes.io/arch=amd64,kubernetes.
 io/hostname=k8s-worker-1,kubernetes.io/os=linux,rack=rack2
 vagrant@k8s-master:~$ 
-`
+```
 
 So we have patched the master and worker nodes and added the labels. Now let us create the BGP peers for each.
 
-`
+```
 vagrant@k8s-master:~$ kubectl apply -f - <<EOF
 > ---
 > # BGP peer configuration.
@@ -236,7 +236,7 @@ vagrant@k8s-master:~$ kubectl apply -f - <<EOF
 > ---
 > 
 > EOF
-`
+```
 
 The commands above are in bgpconfig.yaml file on master node, so it's easy to copy/paste. NOTE: you may need to download appropriate calicoctl for enterprise use. I used kubectl to apply.
 
@@ -278,11 +278,11 @@ coredns-66bff467f8-4mjs6   1/1     Running   0          33s   10.10.230.0   k8s-
 coredns-66bff467f8-4xlcz   1/1     Running   0          34s   10.10.230.1   k8s-worker-1   <none>           <none>
 vagrant@k8s-master:~$ 
 
-`
+```
 
 So we are able to schedule pods on worker node. Now remember that we had set up static routes for bootstrapping. Need to disable that.
 
-`
+```
 vagrant@leaf-sw10:mgmt:~$ sudo net show route static 
 sudo: unable to resolve host leaf-sw10.lab.local: Name or service not known
 RIB entry for static
@@ -301,23 +301,23 @@ sudo: unable to resolve host leaf-sw10.lab.local: Name or service not known
 RIB entry for static
 ==================== 
 vagrant@leaf-sw10:mgmt:~$ 
-`
+```
 
 Repeat the same for every leaf switches.
 
-`
+```
 vagrant@k8s-master:~$ kubectl get node -o wide
 NAME           STATUS     ROLES    AGE   VERSION   INTERNAL-IP     EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION      CONTAINER-RUNTIME
 k8s-master     Ready      master   99m   v1.18.1   192.168.200.1   <none>        Ubuntu 18.04.4 LTS   4.15.0-76-generic   docker://19.3.8
 k8s-worker-1   NotReady   <none>   97m   v1.18.1   192.168.201.1   <none>        Ubuntu 18.04.4 LTS   4.15.0-76-generic   docker://19.3.8
 vagrant@k8s-master:~$ 
-`
+```
 
 As expected, the worker is not ready, as the fabric does not know the route to loopback.
 
 Let us advertise the loopback.
 
-`
+```
 vagrant@k8s-master:~$ kubectl get ippool
 NAME                  AGE
 default-ipv4-ippool   99m
@@ -364,7 +364,7 @@ Codes: K - kernel route, C - connected, S - static, R - RIP,
 B>* 10.10.230.0/26 [200/0] via 10.50.3.10, VLAN10, 00:18:26
   *                        via fe80::a00:27ff:fe7e:a87d, swp4, 00:18:26
 B>* 10.10.235.192/26 [20/0] via fe80::a00:27ff:fefb:9494, swp1, 00:20:09
-`
+```
 
 As expected, the master gets ready as soon as you advertise the loopback. Need to address an outstanding issue (might be a config), where ALL the loopbacks are being advertised by ALL the nodes, even if we put the nodeselector. This is work-in-progress, might be just a config issue with BGP.
 
