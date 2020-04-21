@@ -12,6 +12,7 @@ interfaces:
   - name: swp4
   - name: swp5
   - name: swp6
+  - name: swp7
 
 
 bgp:
@@ -39,6 +40,10 @@ bgp:
     - interface: swp6
       astype: external
       softinbound: true
+    - interface: swp7
+      astype: internal
+      softinbound: true
+
 
 routemaps:
   - name: CONNECTED_TO_BGP

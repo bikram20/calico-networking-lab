@@ -5,9 +5,9 @@ NOTE: You will need Calico Enterprise to run this lab. Copy your config.json int
 
 ### Lab setup
 
-Spine layer - spine1, spine2
-Rack1 - leaf10, leaf11, k8s-master
-Rack2 - leaf20, leaf21, k8s-worker-1
+Spine layer - spine1, spine2. AS65001
+Rack1 - leaf10, leaf11, k8s-master. AS65101
+Rack2 - leaf20, leaf21, k8s-worker-1. AS65102
 
 
 Loopbacks for the leaf and spine switches - 172.16.255.x
@@ -367,7 +367,7 @@ B>* 10.10.230.0/26 [200/0] via 10.50.3.10, VLAN10, 00:18:26
 B>* 10.10.235.192/26 [20/0] via fe80::a00:27ff:fefb:9494, swp1, 00:20:09
 ```
 
-As expected, the master gets ready as soon as you advertise the loopback. Need to address an outstanding issue (might be a config), where ALL the loopbacks are being advertised by ALL the nodes, even if we put the nodeselector. This is work-in-progress, might be just a config issue with BGP.
+As expected, the master gets ready as soon as you advertise the loopback. 
 
 
 

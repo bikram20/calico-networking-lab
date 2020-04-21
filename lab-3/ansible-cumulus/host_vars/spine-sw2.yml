@@ -15,7 +15,7 @@ interfaces:
 
 
 bgp:
-  as: 65002
+  as: 65001
   routerid: 172.16.255.2
   ipv4_unicast_redistribute:
     - route_map: CONNECTED_TO_BGP
@@ -38,6 +38,9 @@ bgp:
       softinbound: true
     - interface: swp6
       astype: external
+      softinbound: true
+    - interface: swp7
+      astype: internal
       softinbound: true
 
 routemaps:

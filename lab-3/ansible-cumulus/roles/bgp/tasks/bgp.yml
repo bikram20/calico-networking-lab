@@ -3,6 +3,8 @@
     template: |
       add bgp autonomous-system {{bgp['as']}}
       add bgp router-id {{bgp['routerid']}}
+      add bgp bestpath as-path multipath-relax
+      add bgp bestpath compare-routerid
       {% if bgp['clusterid'] is defined %}
       add bgp cluster-id {{bgp['clusterid']}}
       {% endif %}

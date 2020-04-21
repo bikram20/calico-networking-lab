@@ -15,6 +15,7 @@ Vagrant.configure("2") do |config|
         spine1.vm.network "private_network", virtualbox__intnet: "spine1_leaf21", cumulus__intname: 'swp4', auto_config: false
         spine1.vm.network "private_network", virtualbox__intnet: "spine1_leaf30", cumulus__intname: 'swp5', auto_config: false
         spine1.vm.network "private_network", virtualbox__intnet: "spine1_leaf31", cumulus__intname: 'swp6', auto_config: false
+        spine1.vm.network "private_network", virtualbox__intnet: "spine1_spine2", cumulus__intname: 'swp7', auto_config: false
         spine1.vm.provision "ansible" do |ansible|
             ansible.playbook = "ansible-cumulus/cumulus.yaml"
             ansible.raw_arguments = "--extra-vars=@ansible-cumulus/host_vars/spine-sw1.yml" 
@@ -32,6 +33,7 @@ Vagrant.configure("2") do |config|
         spine2.vm.network "private_network", virtualbox__intnet: "spine2_leaf21", cumulus__intname: 'swp4', auto_config: false
         spine2.vm.network "private_network", virtualbox__intnet: "spine2_leaf30", cumulus__intname: 'swp5', auto_config: false
         spine2.vm.network "private_network", virtualbox__intnet: "spine2_leaf31", cumulus__intname: 'swp6', auto_config: false
+        spine2.vm.network "private_network", virtualbox__intnet: "spine1_spine2", cumulus__intname: 'swp7', auto_config: false
         spine2.vm.provision "ansible" do |ansible|
             ansible.playbook = "ansible-cumulus/cumulus.yaml"
             ansible.raw_arguments = "--extra-vars=@ansible-cumulus/host_vars/spine-sw2.yml" 
