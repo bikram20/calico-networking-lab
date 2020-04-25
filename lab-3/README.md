@@ -370,6 +370,9 @@ B>* 10.10.235.192/26 [20/0] via fe80::a00:27ff:fefb:9494, swp1, 00:20:09
 As expected, the master gets ready as soon as you advertise the loopback. 
 
 
+NOTE: After advertising the loopback, if you try to disable an interface, then there is a routing blockhole where leaf20 and leaf21 think that 192.168.200.1 is on k8s-worker-1. So the worker node goes to not-ready state. Still investigating the cause.
+
+
 
 
 
