@@ -18,6 +18,15 @@
       name: /swapfile
       state: absent
 
+  - name: insert dns mapping
+    blockinfile:
+      path: /etc/hosts
+      insertbefore: "BOF"
+      block: |
+        192.168.200.1 k8s-master k8s-master
+        192.168.201.1 k8s-worker-1 k8s-worker-1
+        192.168.202.1 k8s-worker-2 k8s-worker-2
+
   - name: start Docker
     service:
       name: docker
@@ -83,15 +92,23 @@
 
   - name: Copy custom resources
     become: no
-    copy: src=custom-resources.yaml dest=/tmp/custom-resources.yaml mode=0777
+    copy: src=custom-resources.yaml dest=/home/vagrant/custom-resources.yaml mode=0777
 
-  - name: Apply custom resources install
-    become: no
-    command: kubectl apply -f /tmp/custom-resources.yaml
+#  - name: Apply custom resources install
+#    become: no
+#    command: kubectl apply -f /tmp/custom-resources.yaml
 
   - name: Copy bgpconfig
     become: no
     copy: src=bgpconfig.yaml dest=/home/vagrant/bgpconfig.yaml mode=0777
+
+  - name: Copy bgpconfig
+    become: no
+    copy: src=testpod.yaml dest=/home/vagrant/testpod.yaml mode=0777
+
+  - name: Copy bgpconfig
+    become: no
+    copy: src=calicoctl dest=/home/vagrant/calicoctl mode=0777
 
 #  - name: Get url
 #    become: no

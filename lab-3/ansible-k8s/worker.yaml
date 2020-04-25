@@ -17,6 +17,15 @@
       name: /swapfile
       state: absent
 
+  - name: insert dns mapping
+    blockinfile:
+      path: /etc/hosts
+      insertbefore: "BOF"
+      block: |
+        192.168.200.1 k8s-master k8s-master
+        192.168.201.1 k8s-worker-1 k8s-worker-1
+        192.168.202.1 k8s-worker-2 k8s-worker-2
+
   - name: start Docker
     service:
       name: docker

@@ -15,7 +15,6 @@ Vagrant.configure("2") do |config|
         spine1.vm.network "private_network", virtualbox__intnet: "spine1_leaf21", cumulus__intname: 'swp4', auto_config: false
         spine1.vm.network "private_network", virtualbox__intnet: "spine1_leaf30", cumulus__intname: 'swp5', auto_config: false
         spine1.vm.network "private_network", virtualbox__intnet: "spine1_leaf31", cumulus__intname: 'swp6', auto_config: false
-        spine1.vm.network "private_network", virtualbox__intnet: "spine1_spine2", cumulus__intname: 'swp7', auto_config: false
         spine1.vm.provision "ansible" do |ansible|
             ansible.playbook = "ansible-cumulus/cumulus.yaml"
             ansible.raw_arguments = "--extra-vars=@ansible-cumulus/host_vars/spine-sw1.yml" 
@@ -33,7 +32,6 @@ Vagrant.configure("2") do |config|
         spine2.vm.network "private_network", virtualbox__intnet: "spine2_leaf21", cumulus__intname: 'swp4', auto_config: false
         spine2.vm.network "private_network", virtualbox__intnet: "spine2_leaf30", cumulus__intname: 'swp5', auto_config: false
         spine2.vm.network "private_network", virtualbox__intnet: "spine2_leaf31", cumulus__intname: 'swp6', auto_config: false
-        spine2.vm.network "private_network", virtualbox__intnet: "spine1_spine2", cumulus__intname: 'swp7', auto_config: false
         spine2.vm.provision "ansible" do |ansible|
             ansible.playbook = "ansible-cumulus/cumulus.yaml"
             ansible.raw_arguments = "--extra-vars=@ansible-cumulus/host_vars/spine-sw2.yml" 
@@ -48,7 +46,6 @@ Vagrant.configure("2") do |config|
         leaf1.vm.network "private_network", virtualbox__intnet: "spine1_leaf10", cumulus__intname: 'swp1', auto_config: false
         leaf1.vm.network "private_network", virtualbox__intnet: "spine2_leaf10", cumulus__intname: 'swp2', auto_config: false
         leaf1.vm.network "private_network", virtualbox__intnet: "rack1_leaf10", cumulus__intname: 'swp3', auto_config: false
-        leaf1.vm.network "private_network", virtualbox__intnet: "leaf10_leaf11", cumulus__intname: 'swp4', auto_config: false
         leaf1.vm.provision "ansible" do |ansible|
             ansible.playbook = "ansible-cumulus/cumulus.yaml"
             ansible.raw_arguments = "--extra-vars=@ansible-cumulus/host_vars/leaf-sw10.yml" 
@@ -63,7 +60,6 @@ Vagrant.configure("2") do |config|
         leaf1.vm.network "private_network", virtualbox__intnet: "spine1_leaf11", cumulus__intname: 'swp1', auto_config: false
         leaf1.vm.network "private_network", virtualbox__intnet: "spine2_leaf11", cumulus__intname: 'swp2', auto_config: false
         leaf1.vm.network "private_network", virtualbox__intnet: "rack1_leaf11", cumulus__intname: 'swp3', auto_config: false
-        leaf1.vm.network "private_network", virtualbox__intnet: "leaf10_leaf11", cumulus__intname: 'swp4', auto_config: false
         leaf1.vm.provision "ansible" do |ansible|
             ansible.playbook = "ansible-cumulus/cumulus.yaml"
             ansible.raw_arguments = "--extra-vars=@ansible-cumulus/host_vars/leaf-sw11.yml" 
@@ -78,7 +74,6 @@ Vagrant.configure("2") do |config|
         leaf2.vm.network "private_network", virtualbox__intnet: "spine1_leaf20", cumulus__intname: 'swp1', auto_config: false
         leaf2.vm.network "private_network", virtualbox__intnet: "spine2_leaf20", cumulus__intname: 'swp2', auto_config: false
         leaf2.vm.network "private_network", virtualbox__intnet: "rack2_leaf20", cumulus__intname: 'swp3', auto_config: false
-        leaf2.vm.network "private_network", virtualbox__intnet: "leaf20_leaf21", cumulus__intname: 'swp4', auto_config: false
         leaf2.vm.provision "ansible" do |ansible|
             ansible.playbook = "ansible-cumulus/cumulus.yaml"
             ansible.raw_arguments = "--extra-vars=@ansible-cumulus/host_vars/leaf-sw20.yml" 
@@ -93,7 +88,6 @@ Vagrant.configure("2") do |config|
         leaf2.vm.network "private_network", virtualbox__intnet: "spine1_leaf21", cumulus__intname: 'swp1', auto_config: false
         leaf2.vm.network "private_network", virtualbox__intnet: "spine2_leaf21", cumulus__intname: 'swp2', auto_config: false
         leaf2.vm.network "private_network", virtualbox__intnet: "rack2_leaf21", cumulus__intname: 'swp3', auto_config: false
-        leaf2.vm.network "private_network", virtualbox__intnet: "leaf20_leaf21", cumulus__intname: 'swp4', auto_config: false
         leaf2.vm.provision "ansible" do |ansible|
             ansible.playbook = "ansible-cumulus/cumulus.yaml"
             ansible.raw_arguments = "--extra-vars=@ansible-cumulus/host_vars/leaf-sw21.yml" 
@@ -108,7 +102,6 @@ Vagrant.configure("2") do |config|
         leaf3.vm.network "private_network", virtualbox__intnet: "spine1_leaf30", cumulus__intname: 'swp1', auto_config: false
         leaf3.vm.network "private_network", virtualbox__intnet: "spine2_leaf30", cumulus__intname: 'swp2', auto_config: false
         leaf3.vm.network "private_network", virtualbox__intnet: "rack3_leaf30", cumulus__intname: 'swp3', auto_config: false
-        leaf3.vm.network "private_network", virtualbox__intnet: "leaf30_leaf31", cumulus__intname: 'swp4', auto_config: false
         leaf3.vm.provision "ansible" do |ansible|
             ansible.playbook = "ansible-cumulus/cumulus.yaml"
             ansible.raw_arguments = "--extra-vars=@ansible-cumulus/host_vars/leaf-sw30.yml" 
@@ -123,7 +116,6 @@ Vagrant.configure("2") do |config|
         leaf3.vm.network "private_network", virtualbox__intnet: "spine1_leaf31", cumulus__intname: 'swp1', auto_config: false
         leaf3.vm.network "private_network", virtualbox__intnet: "spine2_leaf31", cumulus__intname: 'swp2', auto_config: false
         leaf3.vm.network "private_network", virtualbox__intnet: "rack3_leaf31", cumulus__intname: 'swp3', auto_config: false
-        leaf3.vm.network "private_network", virtualbox__intnet: "leaf30_leaf31", cumulus__intname: 'swp4', auto_config: false
         leaf3.vm.provision "ansible" do |ansible|
             ansible.playbook = "ansible-cumulus/cumulus.yaml"
             ansible.raw_arguments = "--extra-vars=@ansible-cumulus/host_vars/leaf-sw31.yml" 
@@ -140,18 +132,23 @@ Vagrant.configure("2") do |config|
     config.vm.define "k8s-master" do |master|
         master.vm.box = "k8s-baseos"
         master.vm.provider "virtualbox" do |v|
-            v.memory = 2048
+            v.memory = 3072
             v.cpus = 2
         end
         master.vm.hostname = "k8s-master"
-        master.vm.network "private_network", virtualbox__intnet: "rack1_leaf10", ip: "10.50.1.10"
-        master.vm.network "private_network", virtualbox__intnet: "rack1_leaf11", ip: "10.50.2.10"
+        master.vm.network "private_network", virtualbox__intnet: "rack1_leaf10",  auto_config: false
+        master.vm.network "private_network", virtualbox__intnet: "rack1_leaf11",  auto_config: false
 
         master.vm.provision "shell" do |s|
-            s.inline = "sudo ip link add dummy0 type dummy;
-                        sudo ip link set dummy0 multicast on;
-                        sudo ip addr add 192.168.200.1/32 dev dummy0;
-                        sudo ip link set dummy0 up;
+            s.inline = "sudo ip link add lo; 
+                        ip address add 10.50.1.10/24 dev enp0s8 ;
+                        ip address add 10.50.2.10/24 dev enp0s9 ;
+                        sudo ip addr add 192.168.200.1/32 dev lo;
+                        sudo ip link set lo up;
+                        sudo ethtool -s enp0s8 autoneg on
+                        sudo ethtool -s enp0s9 autoneg on
+                        sudo ip link set enp0s8 up;
+                        sudo ip link set enp0s9 up;
                         sudo ip route add 10.50.3.0/24 proto static scope global nexthop via 10.50.1.1 nexthop via 10.50.2.1;
                         sudo ip route add 10.50.4.0/24 proto static scope global nexthop via 10.50.1.1 nexthop via 10.50.2.1;
                         sudo ip route add 10.50.5.0/24 proto static scope global nexthop via 10.50.1.1 nexthop via 10.50.2.1;
@@ -174,18 +171,23 @@ Vagrant.configure("2") do |config|
     config.vm.define "k8s-worker-1" do |worker|
         worker.vm.box = "k8s-baseos"
         worker.vm.provider "virtualbox" do |v|
-            v.memory = 2048
+            v.memory = 3072
             v.cpus = 2
         end
         worker.vm.hostname = "k8s-worker-1"
-        worker.vm.network "private_network", virtualbox__intnet: "rack2_leaf20", ip: "10.50.3.10"
-        worker.vm.network "private_network", virtualbox__intnet: "rack2_leaf21", ip: "10.50.4.10"
+        worker.vm.network "private_network", virtualbox__intnet: "rack2_leaf20",  auto_config: false
+        worker.vm.network "private_network", virtualbox__intnet: "rack2_leaf21",  auto_config: false
 
         worker.vm.provision "shell" do |s|
-            s.inline = "sudo ip link add dummy0 type dummy;
-                        sudo ip link set dummy0 multicast on;
-                        sudo ip addr add 192.168.201.1/32 dev dummy0;
-                        sudo ip link set dummy0 up;
+            s.inline = "sudo ip link add lo; 
+                        ip address add 10.50.3.10/24 dev enp0s8 ;
+                        ip address add 10.50.4.10/24 dev enp0s9 ;
+                        sudo ip addr add 192.168.201.1/32 dev lo;
+                        sudo ip link set lo up;
+                        sudo ethtool -s enp0s8 autoneg on
+                        sudo ethtool -s enp0s9 autoneg on
+                        sudo ip link set enp0s8 up;
+                        sudo ip link set enp0s9 up;
                         sudo ip route add 10.50.1.0/24 proto static scope global nexthop via 10.50.3.1 nexthop via 10.50.4.1;
                         sudo ip route add 10.50.2.0/24 proto static scope global nexthop via 10.50.3.1 nexthop via 10.50.4.1;
                         sudo ip route add 10.50.5.0/24 proto static scope global nexthop via 10.50.3.1 nexthop via 10.50.4.1;
@@ -212,14 +214,19 @@ Vagrant.configure("2") do |config|
             v.cpus = 2
         end
         worker.vm.hostname = "k8s-worker-2"
-        worker.vm.network "private_network", virtualbox__intnet: "rack3_leaf30", ip: "10.50.5.10"
-        worker.vm.network "private_network", virtualbox__intnet: "rack3_leaf31", ip: "10.50.6.10"
+        worker.vm.network "private_network", virtualbox__intnet: "rack3_leaf30",  auto_config: false
+        worker.vm.network "private_network", virtualbox__intnet: "rack3_leaf31",  auto_config: false
 
         worker.vm.provision "shell" do |s|
-            s.inline = "sudo ip link add dummy0 type dummy;
-                        sudo ip link set dummy0 multicast on;
-                        sudo ip addr add 192.168.202.1/32 dev dummy0;
-                        sudo ip link set dummy0 up;
+            s.inline = "sudo ip link add lo ;
+                        ip address add 10.50.5.10/24 dev enp0s8 ;
+                        ip address add 10.50.6.10/24 dev enp0s9 ;
+                        sudo ip addr add 192.168.202.1/32 dev lo;
+                        sudo ip link set lo up;
+                        sudo ethtool -s enp0s8 autoneg on
+                        sudo ethtool -s enp0s9 autoneg on
+                        sudo ip link set enp0s8 up;
+                        sudo ip link set enp0s9 up;
                         sudo ip route add 10.50.1.0/24 proto static scope global nexthop via 10.50.5.1 nexthop via 10.50.6.1;
                         sudo ip route add 10.50.2.0/24 proto static scope global nexthop via 10.50.5.1 nexthop via 10.50.6.1;
                         sudo ip route add 10.50.3.0/24 proto static scope global nexthop via 10.50.5.1 nexthop via 10.50.6.1;

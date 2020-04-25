@@ -39,9 +39,6 @@ bgp:
     - interface: swp6
       astype: external
       softinbound: true
-    - interface: swp7
-      astype: internal
-      softinbound: true
 
 routemaps:
   - name: CONNECTED_TO_BGP

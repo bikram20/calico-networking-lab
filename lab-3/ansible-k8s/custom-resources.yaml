@@ -11,7 +11,7 @@ spec:
         encapsulation: "None"
         natOutgoing: "Disabled"
     nodeAddressAutodetectionV4:
-      interface: dummy0
+      interface: lo
 
   variant: TigeraSecureEnterprise
   clusterManagementType: Standalone

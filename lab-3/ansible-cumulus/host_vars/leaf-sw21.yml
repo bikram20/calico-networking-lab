@@ -8,7 +8,6 @@ loopbacks:
 interfaces:    
   - name: swp1
   - name: swp2
-  - name: swp4
 
 bridges:
   - name: VLAN10
@@ -38,9 +37,6 @@ bgp:
       softinbound: true
     - interface: swp2
       astype: external
-      softinbound: true
-    - interface: swp4
-      astype: internal
       softinbound: true
 
   ipv4_unicast_peer_groups:
